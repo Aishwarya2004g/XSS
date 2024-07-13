@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clipboard XSS Attack Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clipboard XSS Attack Demo</h1>
+  <button id="copyButton">Copy Malicious Script</button>
+  <div id="output"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+    });
+
+    function copyToClipboard() {
+      const text = "<script>alert('Clipboard XSS Attack!');<\/script>"; // Escaping the forward slash
+      const dummy = document.createElement('textarea');
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+      alert('Malicious script copied to clipboard. Paste it into a vulnerable field.');
+
+      // Display the copied script in the output div
+      const outputDiv = document.getElementById('output');
+      outputDiv.style.display = 'block';
+      outputDiv.innerText = 'Copied Script: ' + text;
+    }
+  </script>
+</body>
+</html>
